@@ -3,11 +3,11 @@ const sample = require('../samples/sample_issue');
 const createProject = (z, bundle) => {
   const responsePromise = z.request({
     method: 'POST',
-    url: 'https://marvelapp.com/graphql',
+    url: 'https://api.marvelapp.com/graphql',
     body: {
       query: `
         mutation {
-          createProject(name: "${bundle.inputData.name}") {
+          createProject(input: {name: "${bundle.inputData.name}"}) {
             ok
             project {
               pk
