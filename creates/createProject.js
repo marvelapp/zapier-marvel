@@ -13,7 +13,7 @@ const perform = (z, bundle) => {
       url: "https://api.marvelapp.com/graphql",
       body: {
         query: `
-          mutation createProject($projectName: String!, $companyPk: Int!) {
+          mutation createProject($projectName: String!, $companyPk: Int) {
             createProject(input: {name: $projectName, companyPk: $companyPk}) {
               ok
               project {
@@ -49,7 +49,7 @@ module.exports = {
   operation: {
     sample,
     inputFields: [
-      { key: "companyPk", label: "Company PK", required: true },
+      { key: "companyPk", label: "Company PK", required: false },
       { key: "projectName", label: "Project Name", required: true }
     ],
     perform,

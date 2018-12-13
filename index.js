@@ -2,6 +2,7 @@
 const createProject = require('./creates/createProject');
 const addCollaboratorsToProject = require("./creates/addCollaboratorsToProject");
 const addCommentToScreen = require("./creates/addCommentToScreen");
+const createScreen = require("./creates/createScreen");
 const triggerProject = require('./triggers/project');
 const authentication = require('./authentication');
 
@@ -46,6 +47,7 @@ const App = {
     [createProject.key]: createProject,
     [addCollaboratorsToProject.key]: addCollaboratorsToProject,
     [addCommentToScreen.key]: addCommentToScreen,
+    [createScreen.key]: createScreen,
   }
 };
 
