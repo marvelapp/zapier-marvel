@@ -1,6 +1,7 @@
 // const repoTrigger = require('./triggers/repo');
 const createProject = require('./creates/createProject');
 const addCollaboratorsToProject = require("./creates/addCollaboratorsToProject");
+const addCommentToScreen = require("./creates/addCommentToScreen");
 const triggerProject = require('./triggers/project');
 const authentication = require('./authentication');
 
@@ -43,7 +44,8 @@ const App = {
   // If you want your creates to show up, you better include it here!
   creates: {
     [createProject.key]: createProject,
-    [addCollaboratorsToProject.key]: addCollaboratorsToProject
+    [addCollaboratorsToProject.key]: addCollaboratorsToProject,
+    [addCommentToScreen.key]: addCommentToScreen,
   }
 };
 

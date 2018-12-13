@@ -1,4 +1,4 @@
-const scopes = "user:read projects:read projects:write company.projects:read";
+const scopes = "user:read projects:read projects:write company.projects:read projects.comments:write";
 
 const refreshAccessToken = (z, bundle) => {
   const promise = z.request(`https://marvelapp.com/oauth/token/`, {
