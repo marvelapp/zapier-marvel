@@ -1,3 +1,34 @@
+const scopes = 'user:read projects:read projects:write';
+
+const refreshAccessToken = (z, bundle) => {
+  const promise = z.request(`https://marvelapp.com/oauth/token/`, {
+    method: 'POST',
+    body: {
+      refresh_token: bundle.authData.refresh_token,
+      client_id: process.env.CLIENT_ID,
+      client_secret: process.env.CLIENT_SECRET,
+      grant_type: 'refresh_token',
+      scope: scopes,
+    },
+    headers: {
+      'content-type': 'application/x-www-form-urlencoded'
+    }
+  });
+
+  // Needs to return `access_token`. If the refresh token stays constant, can skip it. If it changes, can
+  // return it here to update the user's auth on Zapier.
+  return promise.then((response) => {
+    if (response.status !== 200) {
+      throw new Error('Unable to fetch access token: ' + response.content);
+    }
+
+    const result = JSON.parse(response.content);
+    return {
+      access_token: result.access_token,
+      refresh_token: result.refresh_token,
+    };
+  });
+};
 const authentication = {
   type: 'oauth2',
   connectionLabel: "Marvel - {{ bundle.authData.data.user.username }} ({{ bundle.authData.data.user.username }})",
@@ -15,7 +46,7 @@ const authentication = {
         state: '{{bundle.inputData.state}}',
         client_id: '{{process.env.CLIENT_ID}}',
         redirect_uri: '{{bundle.inputData.redirect_uri}}',
-        scope: 'user:read projects:write projects:read',
+        scope: scopes,
         response_type: 'code'
       }
     },
@@ -36,7 +67,10 @@ const authentication = {
         'Content-Type': 'application/x-www-form-urlencoded'
       }
     },
-    scope: 'user:read projects:write projects:read',
+    refreshAccessToken: refreshAccessToken,
+    autoRefresh: true,
+
+    scope: scopes,
   },
   // If you need any fields upfront, put them here
   fields: [
