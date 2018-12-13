@@ -29,13 +29,33 @@ const refreshAccessToken = (z, bundle) => {
     };
   });
 };
+
+const testAuth = (z /*, bundle*/) => {
+  // Normally you want to make a request to an endpoint that is either
+  // specifically designed to test auth, or one that every user will have access
+  // to, such as an account or profile endpoint like /me.
+  const promise = z.request({
+    method: 'GET',
+    url: 'https://marvelapp.com/graphql?query={ user { email username }}',
+  });
+
+  // This method can return any truthy value to indicate the credentials are valid.
+  // Raise an error to show
+  return promise.then((response) => {
+    if (response.status !== 200) {
+      throw new Error('The access token you supplied is not valid');
+    }
+
+    const parsedData = z.JSON.parse(response.content);
+    return parsedData.data.user;
+  });
+};
+
 const authentication = {
   type: 'oauth2',
-  connectionLabel: "Marvel - {{ bundle.authData.data.user.username }} ({{ bundle.authData.data.user.username }})",
-  test: {
-    url:
-      'https://marvelapp.com/graphql?query={ user { email username }}'
-  },
+  test: testAuth,
+  // These variables are returned from 'testAuth'
+  connectionLabel: 'Marvel - {{username}} ({{email}})',
   // you can provide additional fields for inclusion in authData
   oauth2Config: {
     // "authorizeUrl" could also be a function returning a string url
