@@ -1,4 +1,5 @@
 const _ = require("lodash");
+const projectFragment = require('../fragments/project');
 
 const sample = {
   projectPk: 5,
@@ -13,13 +14,12 @@ const perform = (z, bundle) => {
       url: "https://api.marvelapp.com/graphql",
       body: {
         query: `
+          ${projectData}
           mutation createProject($projectName: String!, $companyPk: Int) {
             createProject(input: {name: $projectName, companyPk: $companyPk}) {
               ok
               project {
-                pk
-                name
-                prototypeUrl
+                ...projectData
               }
             }
           }
@@ -54,9 +54,13 @@ module.exports = {
     ],
     perform,
     outputFields: [
-      { key: "projectPk", label: "Project PK" },
-      { key: "projectUrl", label: "Project URL" },
-      { key: "projectName", label: "Project Name" }
+      { key: 'id', label: 'ID' },
+      { key: 'uuid', label: 'UUID' },
+      { key: 'name', label: 'Name' },
+      { key: 'prototypeUrl', label: 'Prototype URL' },
+      { key: 'isArchived', label: 'Is Archived' },
+      { key: 'createdAt', label: 'Created At' },
+      { key: 'modifiedAt', label: 'Modified At' },
     ]
   }
 };
