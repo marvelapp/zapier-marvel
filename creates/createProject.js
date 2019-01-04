@@ -15,7 +15,7 @@ const perform = (z, bundle) => {
       body: {
         query: `
           ${projectFragment}
-          mutation createProject($projectName: String!, $companyPk: Int) {
+          mutation zapierCreateProject($projectName: String!, $companyPk: Int) {
             createProject(input: {name: $projectName, companyPk: $companyPk}) {
               ok
               project {
