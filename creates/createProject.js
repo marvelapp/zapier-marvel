@@ -14,7 +14,7 @@ const perform = (z, bundle) => {
       url: "https://api.marvelapp.com/graphql",
       body: {
         query: `
-          ${projectData}
+          ${projectFragment}
           mutation createProject($projectName: String!, $companyPk: Int) {
             createProject(input: {name: $projectName, companyPk: $companyPk}) {
               ok
