@@ -1,4 +1,5 @@
 const sample = require('../samples/sample_project');
+const projectFragment = require('../fragments/project');
 
 const triggerProject = (z, bundle) => {
   const responsePromise = z.request({
@@ -6,19 +7,7 @@ const triggerProject = (z, bundle) => {
     url: `https://api.marvelapp.com/graphql`,
     body: {
       query: `
-        fragment projectData on ProjectNode {
-          id: pk
-          uuid
-          name
-          prototypeUrl
-          isArchived
-          createdAt
-          modifiedAt
-          settings {
-            deviceFrame
-            portrait
-          }
-        }
+        ${projectFragment}
 
         query zapierGetProjects($first: Int!) {
           user {
