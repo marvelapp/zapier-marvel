@@ -13,7 +13,7 @@ const perform = (z, bundle) => {
       url: 'https://api.marvelapp.com/graphql',
       body: {
         query: `
-          mutation addComment($message: String!, $screenPk: Int!) {
+          mutation zapierAddComment($message: String!, $screenPk: Int!) {
             addComment(input: { message: $message, screenPk: $screenPk }) {
               ok
               comment {

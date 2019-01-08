@@ -22,7 +22,7 @@ const perform = (z, bundle) => {
       url: "https://api.marvelapp.com/graphql",
       body: {
         query: `
-          mutation addCollaboratorsToProject($projectPk: Int!, $collaborators: [String!]!) {
+          mutation zapierAddCollaboratorsToProject($projectPk: Int!, $collaborators: [String!]!) {
             addCollaboratorsToProject(input: {projectPk: $projectPk, emails: $collaborators}) {
               succeeded {
                 username

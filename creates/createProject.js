@@ -14,8 +14,8 @@ const perform = (z, bundle) => {
       url: "https://api.marvelapp.com/graphql",
       body: {
         query: `
-          ${projectData}
-          mutation createProject($projectName: String!, $companyPk: Int) {
+          ${projectFragment}
+          mutation zapierCreateProject($projectName: String!, $companyPk: Int) {
             createProject(input: {name: $projectName, companyPk: $companyPk}) {
               ok
               project {
