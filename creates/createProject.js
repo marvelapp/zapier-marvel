@@ -29,11 +29,7 @@ const perform = (z, bundle) => {
     })
     .then(response => {
       const { data } = JSON.parse(response.content);
-      return {
-        projectPk: data.createProject.project.pk,
-        projectUrl: data.createProject.project.prototypeUrl,
-        projectName: data.createProject.project.name
-      };
+      return data.createProject.project;
     });
 };
 
