@@ -17,7 +17,13 @@ const perform = (z, bundle) => {
             addComment(input: { message: $message, screenPk: $screenPk }) {
               ok
               comment {
+                id: pk
                 message
+                createdAt
+                author {
+                  username
+                  email
+                }
               }
               error {
                 message
@@ -33,11 +39,15 @@ const perform = (z, bundle) => {
       }
     })
     .then(response => {
-      const parsedData = JSON.parse(response.content);
-
+      const { data } = JSON.parse(response.content);
+      const comment = data.addComment.comment;
       return {
-        message: parsedData.data.addComment.comment.message,
-      };
+        id: comment.id,
+        message: comment.message,
+        createdAt: comment.createdAt,
+        authorUsername: comment.author.username,
+        authorEmail: comment.author.email,
+      }
     });
 };
 
@@ -46,8 +56,8 @@ module.exports = {
   noun: "Comment",
 
   display: {
-    label: "Add a Comment to a Screen",
-    description: "Add a Comment to a Screen"
+    label: "Leave a Comment on a Screen",
+    description: "Leave a comment on a screen"
   },
 
   operation: {
@@ -58,7 +68,11 @@ module.exports = {
       { key: "message", label: "Comment", required: true },
     ],
     outputFields: [
+      { key: "id", label: "ID" },
       { key: "message", label: "Comment" },
+      { key: "createdAt", label: "Created At" },
+      { key: "authorUsername", label: "Author Username" },
+      { key: "authorEmail", label: "Author Email" },
     ]
   }
 };
