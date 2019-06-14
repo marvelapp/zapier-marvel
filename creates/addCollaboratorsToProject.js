@@ -1,4 +1,5 @@
 const _ = require("lodash");
+const { gqlRequest } = require('../api');
 
 const sample = {
   succeeded: [
@@ -16,33 +17,27 @@ const sample = {
 };
 
 const perform = (z, bundle) => {
-  return z
-    .request({
-      method: "POST",
-      url: "https://api.marvelapp.com/graphql",
-      body: {
-        query: `
-          mutation zapierAddCollaboratorsToProject($projectPk: Int!, $collaborators: [String!]!) {
-            addCollaboratorsToProject(input: {projectPk: $projectPk, emails: $collaborators}) {
-              succeeded {
-                username
-                email
-              }
-              failed {
-                email
-                message
-              }
-            }
-          }
-        `,
-        variables: {
-          projectPk: bundle.inputData.projectPk,
-          // Accepting a comma delimited array for now since I can't figure out
-          // how passing arrays around work in zapier.
-          collaborators: bundle.inputData.collaborators.split(",")
+  const query = `
+    mutation zapierAddCollaboratorsToProject($projectPk: Int!, $collaborators: [String!]!) {
+      addCollaboratorsToProject(input: {projectPk: $projectPk, emails: $collaborators}) {
+        succeeded {
+          username
+          email
+        }
+        failed {
+          email
+          message
         }
       }
-    })
+    }
+  `;
+  const variables = {
+      projectPk: bundle.inputData.projectPk,
+      // Accepting a comma delimited array for now since I can't figure out
+      // how passing arrays around work in zapier.
+      collaborators: bundle.inputData.collaborators.split(",")
+  }
+  return gqlRequest(z, bundle, query, variables)
     .then(response => {
       const { data } = JSON.parse(response.content);
       return {

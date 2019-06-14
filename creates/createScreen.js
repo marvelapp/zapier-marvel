@@ -1,4 +1,5 @@
 const _ = require("lodash");
+const { gqlRequest } = require('../api');
 const FormData = require('form-data');
 const request = require('request');
 
@@ -7,26 +8,19 @@ const screenFragment = require('../fragments/screen');
 const sample = require('../samples/sample_screen');
 
 const perform = (z, bundle) => {
-  return z
-    .request({
-      method: "POST",
-      url: "https://api.marvelapp.com/graphql",
-      body: {
-        query: `
-          ${screenFragment}
-          mutation createScreen($screenName: String, $projectPk: Int!) {
-            createScreen(input: {name: $screenName, projectPk: $projectPk}) {
-              ok
-              screen {
-                ...screenInfo
-              }
-            }
-          }
-        `,
-        variables: _.pick(bundle.inputData, ["screenName", "projectPk"])
+  const query = `
+    ${screenFragment}
+    mutation createScreen($screenName: String, $projectPk: Int!) {
+      createScreen(input: {name: $screenName, projectPk: $projectPk}) {
+        ok
+        screen {
+          ...screenInfo
+        }
       }
-    })
-    .then(response => {
+    }`;
+    const variables = _.pick(bundle.inputData, ["screenName", "projectPk"]);
+
+  return gqlRequest(z, bundle, query, variables).then(response => {
       const { data } = JSON.parse(response.content);
       return data.createScreen;
     }).then(data => {
@@ -36,12 +30,16 @@ const perform = (z, bundle) => {
       }
 
       const form = new FormData();
+      const headers = form.getHeaders();
+      // manually add the bearer token because we can't use the gqlRequest helper
+      headers.Authorization = `Bearer ${bundle.authData.access_token}`;
+
       form.append('file', request(bundle.inputData.imageURL));
       return z.request({
         url: screenData.uploadUrl,
         method: 'POST',
         body: form,
-        headers: form.getHeaders(),
+        headers: headers,
       }).then(() => {
         // todo: refetch screen data with updated image
         return screenData;

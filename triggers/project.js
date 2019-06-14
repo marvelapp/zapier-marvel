@@ -1,4 +1,6 @@
 const _ = require("lodash");
+const { gqlRequest } = require('../api');
+
 
 const sample = require('../samples/sample_project');
 const projectFragment = require('../fragments/project');
@@ -35,7 +37,7 @@ query zapierGetProjects($first: Int!, $personalCursor: String, $skipPersonal: Bo
 }
 `
 
-const fetchProjects = (z, personalCursor, skipPersonal, companyCursor, skipCompany) => {
+const fetchProjects = (z, bundle, personalCursor, skipPersonal, companyCursor, skipCompany) => {
   z.console.log('Fetching projects', {
     type: 'personal',
     cursor: personalCursor,
@@ -45,19 +47,13 @@ const fetchProjects = (z, personalCursor, skipPersonal, companyCursor, skipCompa
     cursor: companyCursor,
     skip: skipCompany,
   })
-  return z.request({
-    method: 'POST',
-    url: `https://api.marvelapp.com/graphql`,
-    body: {
-      query: query,
-      variables: {
-        first: 25,
-        personalCursor: personalCursor,
-        companyCursor: companyCursor,
-        skipPersonal: skipPersonal || false,
-        skipCompany: skipCompany || false,
-      }
-    }
+  return gqlRequest(z, bundle, query, {
+    first: 25,
+    personalCursor: personalCursor,
+    companyCursor: companyCursor,
+    skipPersonal: skipPersonal || false,
+    skipCompany: skipCompany || false,
+
   });
 }
 
@@ -96,7 +92,7 @@ const triggerProject = async (z, bundle) => {
 
   const maxPages = 5;
   for (var i = 0; i <= maxPages; i++) {
-    response = await fetchProjects(z, personalCursor, skipPersonal, companyCursor, skipCompany);
+    response = await fetchProjects(z, bundle, personalCursor, skipPersonal, companyCursor, skipCompany);
     respData = z.JSON.parse(response.content);
 
     // if we've hit the end, skip the field for the next request
