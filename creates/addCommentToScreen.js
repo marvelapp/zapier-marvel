@@ -1,3 +1,5 @@
+const { gqlRequest } = require('../api');
+
 const sample = {
   comment: {
     message: 'hello again',
@@ -7,38 +9,33 @@ const sample = {
 };
 
 const perform = (z, bundle) => {
-  return z
-    .request({
-      method: 'POST',
-      url: 'https://api.marvelapp.com/graphql',
-      body: {
-        query: `
-          mutation zapierAddComment($message: String!, $screenPk: Int!) {
-            addComment(input: { message: $message, screenPk: $screenPk }) {
-              ok
-              comment {
-                id: pk
-                message
-                createdAt
-                author {
-                  username
-                  email
-                }
-              }
-              error {
-                message
-                code
-              }
-            }
+  const query = `
+    mutation zapierAddComment($message: String!, $screenPk: Int!) {
+      addComment(input: { message: $message, screenPk: $screenPk }) {
+        ok
+        comment {
+          id: pk
+          message
+          createdAt
+          author {
+            username
+            email
           }
-        `,
-        variables: {
-          screenPk: bundle.inputData.screenPk,
-          message: bundle.inputData.message,
+        }
+        error {
+          message
+          code
         }
       }
-    })
-    .then(response => {
+    }`;
+    const variables = {
+      screenPk: bundle.inputData.screenPk,
+      message: bundle.inputData.message,
+    };
+
+
+  return gqlRequest(z, bundle, query, variables).then(response => {
+      console.log(response);
       const { data } = JSON.parse(response.content);
       const comment = data.addComment.comment;
       return {

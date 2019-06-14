@@ -1,5 +1,6 @@
 const _ = require("lodash");
 const projectFragment = require('../fragments/project');
+const { gqlRequest } = require('../api');
 
 const sample = {
   projectPk: 5,
@@ -8,29 +9,24 @@ const sample = {
 };
 
 const perform = (z, bundle) => {
-  return z
-    .request({
-      method: "POST",
-      url: "https://api.marvelapp.com/graphql",
-      body: {
-        query: `
-          ${projectFragment}
-          mutation zapierCreateProject($projectName: String!, $companyPk: Int) {
-            createProject(input: {name: $projectName, companyPk: $companyPk}) {
-              ok
-              project {
-                ...projectData
-              }
-            }
+  const query =  `
+      ${projectFragment}
+      mutation zapierCreateProject($projectName: String!, $companyPk: Int) {
+        createProject(input: {name: $projectName, companyPk: $companyPk}) {
+          ok
+          project {
+            ...projectData
           }
-        `,
-        variables: _.pick(bundle.inputData, ["projectName", "companyPk"])
+        }
       }
-    })
-    .then(response => {
-      const { data } = JSON.parse(response.content);
-      return data.createProject.project;
-    });
+    `;
+
+  const variables = _.pick(bundle.inputData, ["projectName", "companyPk"]);
+
+  return gqlRequest(z, bundle, query, variables).then(response => {
+    const { data } = JSON.parse(response.content);
+    return data.createProject.project;
+  });
 };
 
 module.exports = {
