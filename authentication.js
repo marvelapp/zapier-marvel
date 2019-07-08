@@ -1,3 +1,5 @@
+const { gqlRequest } = require('./api');
+
 const scopes = "user:read projects:read projects:write company.projects:read projects.comments:write";
 
 const refreshAccessToken = (z, bundle) => {
@@ -30,18 +32,10 @@ const refreshAccessToken = (z, bundle) => {
   });
 };
 
-const testAuth = (z /*, bundle*/) => {
-  // Normally you want to make a request to an endpoint that is either
-  // specifically designed to test auth, or one that every user will have access
-  // to, such as an account or profile endpoint like /me.
-  const promise = z.request({
-    method: "GET",
-    url: "https://marvelapp.com/graphql?query={ user { email username }}"
-  });
-
-  // This method can return any truthy value to indicate the credentials are valid.
-  // Raise an error to show
-  return promise.then(response => {
+const testAuth = (z, bundle) => {
+  // This function is for zapier to test whether auth is working
+  const query = `query zapierAuthTest { user { email username } }`
+  return gqlRequest(z, bundle, query).then(response => {
     if (response.status !== 200) {
       throw new Error("The access token you supplied is not valid");
     }
