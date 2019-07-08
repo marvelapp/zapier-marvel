@@ -24,7 +24,10 @@ const perform = (z, bundle) => {
   const variables = _.pick(bundle.inputData, ["projectName", "companyPk"]);
 
   return gqlRequest(z, bundle, query, variables).then(response => {
-    const { data } = JSON.parse(response.content);
+    const { data, errors } = JSON.parse(response.content);
+    if (!data || !data.createProject || !data.createProject.ok){
+      throw new Error(`Could not create project: ${errors[0].message}`)
+    }
     return data.createProject.project;
   });
 };
