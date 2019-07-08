@@ -130,7 +130,8 @@ module.exports = {
 
   display: {
     label: 'Fetch Projects',
-    description: 'Triggers when a new project appears in your account'
+    description: 'Triggers when a new project appears in your account',
+    important: true,
   },
 
   operation: {

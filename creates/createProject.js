@@ -38,7 +38,8 @@ module.exports = {
 
   display: {
     label: "Create Project",
-    description: "Creates a project."
+    description: "Creates a project.",
+    important: true,
   },
 
   operation: {

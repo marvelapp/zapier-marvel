@@ -56,7 +56,8 @@ module.exports = {
 
   display: {
     label: "Create a Screen",
-    description: "Creates a screen within a project & uploads an image"
+    description: "Creates a screen within a project & uploads an image",
+    important: true,
   },
 
   operation: {
