@@ -27,6 +27,7 @@ const perform = (z, bundle) => {
         failed {
           email
           message
+          code
         }
       }
     }
@@ -39,7 +40,10 @@ const perform = (z, bundle) => {
   }
   return gqlRequest(z, bundle, query, variables)
     .then(response => {
-      const { data } = JSON.parse(response.content);
+      const { data, errors } = JSON.parse(response.content);
+      if (errors || !data) {
+        throw new Error(`Could not create screen: ${errors[0].message}`)
+      }
       return {
         succeeded: data.addCollaboratorsToProject.succeeded,
         failed: data.addCollaboratorsToProject.failed
