@@ -36,7 +36,14 @@ const perform = (z, bundle) => {
 
   return gqlRequest(z, bundle, query, variables).then(response => {
       console.log(response);
-      const { data } = JSON.parse(response.content);
+      const { data, errors } = JSON.parse(response.content);
+      if (errors || !data) {
+        throw new Error(`Could not create screen: ${errors[0].message}`)
+      }
+      if (!data.addComment.ok) {
+        throw new Error(`Could not create screen: ${data.addComment.error.message}`);
+      }
+
       const comment = data.addComment.comment;
       return {
         id: comment.id,
