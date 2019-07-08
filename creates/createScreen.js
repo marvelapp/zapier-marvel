@@ -21,7 +21,10 @@ const perform = (z, bundle) => {
     const variables = _.pick(bundle.inputData, ["screenName", "projectPk"]);
 
   return gqlRequest(z, bundle, query, variables).then(response => {
-      const { data } = JSON.parse(response.content);
+      const { data, errors } = JSON.parse(response.content);
+      if (errors || !data || !data.createScreen || !data.createScreen.ok) {
+        throw new Error(`Could not create screen: ${errors[0].message}`)
+      }
       return data.createScreen;
     }).then(data => {
       const screenData = data.screen;
