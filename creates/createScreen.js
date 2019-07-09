@@ -3,7 +3,6 @@ const { gqlRequest } = require('../api');
 const FormData = require('form-data');
 const request = require('request');
 
-
 const screenFragment = require('../fragments/screen');
 const sample = require('../samples/sample_screen');
 

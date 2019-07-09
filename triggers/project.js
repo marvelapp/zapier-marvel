@@ -137,13 +137,20 @@ module.exports = {
   operation: {
     inputFields: [],
     outputFields: [
-      { key: 'id', label: 'ID' },
+      { key: 'id', label: 'ID', type: 'integer' },
       { key: 'uuid', label: 'UUID' },
       { key: 'name', label: 'Name' },
       { key: 'prototypeUrl', label: 'Prototype URL' },
-      { key: 'isArchived', label: 'Is Archived' },
-      { key: 'createdAt', label: 'Created At' },
-      { key: 'modifiedAt', label: 'Modified At' },
+      { key: 'isArchived', label: 'Is Archived', type: 'boolean' },
+      { key: 'createdAt', label: 'Created At', type: 'datetime' },
+      { key: 'modifiedAt', label: 'Modified At', type: 'datetime' },
+      { key: 'passwordProtected', label: 'Password protected', type: 'boolean' },
+      {
+        key: 'settings', children: [
+          { key: 'deviceFrame', label: 'Device Frame' },
+          { key: 'portrait', label: 'Portrait orientation', type: 'boolean' },
+        ]
+      },
     ],
     perform: triggerProject,
 
