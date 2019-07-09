@@ -1,8 +1,7 @@
 const _ = require("lodash");
 const { gqlRequest } = require('../api');
 
-
-const sample = require('../samples/sample_project');
+const sample = require('../samples/project');
 const projectFragment = require('../fragments/project');
 
 const query = `
