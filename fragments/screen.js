@@ -17,6 +17,5 @@ fragment screenInfo on ScreenNode {
         }
     }
     uploadUrl
-    sectionPk
 }
 `

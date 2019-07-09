@@ -62,12 +62,27 @@ module.exports = {
   operation: {
     sample,
     inputFields: [
-      { key: "projectPk", label: "Project ID", required: true },
+      { key: "projectPk", label: "Project ID", required: true, type: 'integer' },
       { key: "screenName", label: "Screen Name", required: false },
       { key: "imageURL", label: "Image URL", required: false },
     ],
     perform,
     outputFields: [
+      { key: 'id', 'label': 'Screen ID', type: 'integer' },
+      { key: 'externalId', 'label': 'External ID' },
+      { key: 'uuid', 'label': 'UUID' },
+      { key: 'name', 'label': 'Name' },
+      { key: 'displayName', 'label': 'Display Name' },
+      { key: 'createdAt', 'label': 'Created At', type: 'datetime' },
+      { key: 'modifiedAt', 'label': 'Modified At', type: 'datetime' },
+      { key: 'sourcePlatform', 'label': 'Source Platform' },
+      { key: 'uploadUrl', 'label': 'Upload URL' },
+      { key: 'content', children: [
+        { key: 'filename', label: 'Filename' },
+        { key: 'url', label: 'URL' },
+        { key: 'height', label: 'Height', type: 'integer' },
+        { key: 'width', label: 'Width', type: 'integer' },
+      ]},
     ]
   }
 };
