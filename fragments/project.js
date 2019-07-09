@@ -7,9 +7,10 @@ fragment projectData on ProjectNode {
     isArchived
     createdAt
     modifiedAt
+    passwordProtected
     settings {
-    deviceFrame
-    portrait
+        deviceFrame
+        portrait
     }
 }
 `

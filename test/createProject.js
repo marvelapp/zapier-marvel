@@ -15,7 +15,7 @@ describe('createProject', () => {
             },
             inputData: {
                 projectName: 'Test name',
-                companyPk: null
+                company: true,
             }
         };
         appTester(App.creates.project.operation.perform, bundle)
