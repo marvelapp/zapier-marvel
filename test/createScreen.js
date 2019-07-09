@@ -12,7 +12,7 @@ describe('createScreen', () => {
                 access_token: process.env.ACCESS_TOKEN,
             },
             inputData: {
-                screenName: 'Checkout Flow 3',
+                screenName: Math.random().toString(36).substring(7),
                 projectPk: 3842846,
                 imageURL: 'https://marvel-live.freetls.fastly.net/serve/2019/3/7228822f4c8742caadf9f1547368142a.png',
             }

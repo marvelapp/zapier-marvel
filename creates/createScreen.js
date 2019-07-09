@@ -42,11 +42,22 @@ const perform = (z, bundle) => {
         method: 'POST',
         body: form,
         headers: headers,
-      }).then(() => {
-        // todo: refetch screen data with updated image
-        return screenData;
-      })
+    }).then(() => {
+      // refetch screen data with updated `content` field
+      const query = `
+        ${screenFragment}
+        query zapierGetScreen($pk: Int!) {
+          screen(pk: $pk) {
+            ...screenInfo
+          }
+        }
+      `
+      return gqlRequest(z, bundle, query, {pk: screenData.id})
+    }).then(response => {
+      const { data } = JSON.parse(response.content);
+      return data.screen;
     });
+  });
 };
 
 module.exports = {
