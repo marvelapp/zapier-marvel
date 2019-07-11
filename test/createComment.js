@@ -12,7 +12,7 @@ describe('createComment', () => {
                 access_token: process.env.ACCESS_TOKEN,
             },
             inputData: {
-                screenPk: 59033130,
+                screenPk: 59166921,
                 message: 'This is an example of a nice comment!'
             }
         };

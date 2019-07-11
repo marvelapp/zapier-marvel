@@ -48,7 +48,7 @@ const perform = (z, bundle) => {
       return {
         id: comment.id,
         message: comment.message,
-        createdAt: comment.createdAt,
+        createdAt: new Date(comment.createdAt),
         authorUsername: comment.author.username,
         authorEmail: comment.author.email,
       }
@@ -68,13 +68,13 @@ module.exports = {
     sample,
     perform,
     inputFields: [
-      { key: "screenPk", label: "Screen PK", required: true },
+      { key: "screenPk", label: "Screen PK", required: true, type: 'integer' },
       { key: "message", label: "Comment", required: true },
     ],
     outputFields: [
-      { key: "id", label: "ID" },
+      { key: "id", label: "ID", type: 'integer' },
       { key: "message", label: "Comment" },
-      { key: "createdAt", label: "Created At" },
+      { key: "createdAt", label: "Created At", type: 'datetime' },
       { key: "authorUsername", label: "Author Username" },
       { key: "authorEmail", label: "Author Email" },
     ]
