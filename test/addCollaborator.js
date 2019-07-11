@@ -13,7 +13,7 @@ describe('addCollaborators', () => {
             },
             inputData: {
                 projectPk: 3912844,
-                collaborators: 'joe.alcorn@marvelapp.com',
+                collaborators: ['joe.alcorn@marvelapp.com'],
             }
         };
         appTester(App.creates.addCollaboratorsToProject.operation.perform, bundle)

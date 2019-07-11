@@ -10,8 +10,9 @@ const sample = {
   ],
   failed: [
     {
-      email: "nish@marvelapp.com",
-      message: "Some error"
+      email: "blah@marvelapp.com",
+      message: "User does not exist",
+      code: "USER_DOES_NOT_EXIST"
     }
   ]
 };
@@ -34,9 +35,7 @@ const perform = (z, bundle) => {
   `;
   const variables = {
       projectPk: bundle.inputData.projectPk,
-      // Accepting a comma delimited array for now since I can't figure out
-      // how passing arrays around work in zapier.
-      collaborators: bundle.inputData.collaborators.split(",")
+      collaborators: bundle.inputData.collaborators,
   }
   return gqlRequest(z, bundle, query, variables)
     .then(response => {
@@ -64,16 +63,24 @@ module.exports = {
     sample,
     perform,
     inputFields: [
-      { key: "projectPk", label: "Project PK", required: true },
+      { key: "projectPk", label: "Project ID", required: true, type: "integer" },
       {
         key: "collaborators",
-        label: "Collaborators",
-        required: true
+        label: "Collaborator email addresses",
+        required: true,
+        list: true,
       }
     ],
     outputFields: [
-      { key: "succeeded", label: "Succeeded" },
-      { key: "failed", label: "Failed" }
+      { key: "succeeded", label: "Succeeded", children: [
+        { key: "username", label: "Username" },
+        { key: "email", label: "Email" },
+      ] },
+      { key: "failed", label: "Failed", children: [
+        { key: "email", label: "Email" },
+        { key: "message", label: "Error message" },
+        { key: "code", label: "Error code" },
+      ] }
     ]
   }
 };
